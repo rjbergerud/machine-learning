@@ -67,16 +67,21 @@ class LearningAgent(Agent):
 
     def get_maxQ(self, state):
         """ The get_max_Q function is called when the agent is asked to find the
-            maximum Q-value of all actions based on the 'state' the smartcab is in. """
+            maximum Q-value of all actions based on the 'state' the smartcab is in.
+            Args:
+                state (tuple):
+            Returns:
+                maxQ (float): a value
+        """
 
         ########### 
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
+        q_values = [self.Q[state][action] for action in self.valid_actions]
+        maxQ = max(q_values)
 
-        maxQ = None
-
-        return maxQ 
+        return maxQ
 
 
     def createQ(self, state):

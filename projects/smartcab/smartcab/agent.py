@@ -105,6 +105,15 @@ class LearningAgent(Agent):
                     self.Q[state][action] = 0.0
         return
 
+    def get_argMaxQ(self, state):
+        """
+        Returns the action which gives greatest q_values
+        """
+
+        f = lambda action: self.Q[state][action]
+        action = max(self.valid_actions, key=f)
+        return action
+
 
     def choose_action(self, state):
         """ The choose_action function is called when the agent is asked to choose

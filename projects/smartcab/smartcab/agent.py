@@ -32,35 +32,41 @@ class LearningAgent(Agent):
 
         # Select the destination as the new location to route to
         self.planner.route_to(destination)
-        
-        ########### 
+
+        ###########
         ## TO DO ##
         ###########
         # Update epsilon using a decay function of your choice
+        self.epsilon = self.epsilon/1.03  # exponential decay function for epsilon
+        self.alpha = self.alpha
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
+        if testing == True:
+            self.epsilon = 0.0
+            self.alpha = 0.0
 
         return None
 
     def build_state(self):
-        """ The build_state function is called when the agent requests data from the 
-            environment. The next waypoint, the intersection inputs, and the deadline 
+        """ The build_state function is called when the agent requests data from the
+            environment. The next waypoint, the intersection inputs, and the deadline
             are all features available to the agent. """
 
         # Collect data about the environment
-        waypoint = self.planner.next_waypoint() # The next waypoint 
+        waypoint = self.planner.next_waypoint() # The next waypoint
         inputs = self.env.sense(self)           # Visual input - intersection light and traffic
         deadline = self.env.get_deadline(self)  # Remaining deadline
 
-        ########### 
+        ###########
         ## TO DO ##
         ###########
         # Set 'state' as a tuple of relevant data for the agent
-        # When learning, check if the state is in the Q-table
-        #   If it is not, create a dictionary in the Q-table for the current 'state'
-        #   For each action, set the Q-value for the state-action pair to 0
-        
-        state = None
+        #('right',
+        #   {'light': 'red', 'oncoming': 'forward', 'right': None, 'left': 'left'},
+        # 20)
+
+        # state = (waypoint, inputs['light'], inputs['oncoming'], inputs['right'], inputs['left'], deadline)
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'])
 
         return state
 

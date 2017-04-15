@@ -6,10 +6,10 @@ from simulator import Simulator
 
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
-        This is the object you will be modifying. """ 
+        This is the object you will be modifying. """
 
     def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
-        super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
+        super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
 
@@ -80,7 +80,7 @@ class LearningAgent(Agent):
                 maxQ (float): a value
         """
 
-        ########### 
+        ###########
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
@@ -97,15 +97,14 @@ class LearningAgent(Agent):
             state (tuple):
         """
 
-        ########### 
+        ###########
         ## TO DO ##
         ###########
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-
-        if self.Learning == True:
-            if self.Q[state] == None:
+        if self.learning == True:
+            if state not in self.Q:
                 self.Q[state] = dict()
                 for action in self.valid_actions:
                     self.Q[state][action] = 0.0
@@ -178,10 +177,10 @@ class LearningAgent(Agent):
         self.learn(state, action, reward)   # Q-learn
 
         return
-        
+
 
 def run():
-    """ Driving function for running the simulation. 
+    """ Driving function for running the simulation.
         Press ESC to close the simulation, or [SPACE] to pause the simulation. """
 
     ##############
@@ -190,37 +189,40 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment()
-    
+    env = Environment({'enforce_deadline': True, 'verbose': False})
+
     ##############
     # Create the driving agent
     # Flags:
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent)
-    
+    agent = env.create_agent(LearningAgent, learning=True, alpha=0.5)
+
     ##############
     # Follow the driving agent
     # Flags:
     #   enforce_deadline - set to True to enforce a deadline metric
-    env.set_primary_agent(agent)
+    env.set_primary_agent(agent, enforce_deadline=True)
 
     ##############
     # Create the simulation
-    # Flags:
+    # Flags:\
     #   update_delay - continuous time (in seconds) between actions, default is 2.0 seconds
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env)
-    
+    sim = Simulator(env, update_delay=0.001, log_metrics=True, display=False, optimized=True)
+
+    # For watching
+    # sim = Simulator(env, update_delay=3, log_metrics=False, display=True)
+
     ##############
     # Run the simulator
     # Flags:
-    #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
+    #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run()
+    sim.run(n_test=10, tolerance=0.05)
 
 
 if __name__ == '__main__':

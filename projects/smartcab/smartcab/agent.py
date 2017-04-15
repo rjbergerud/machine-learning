@@ -115,47 +115,59 @@ class LearningAgent(Agent):
         """
         Returns the action which gives greatest q_values
         """
-
         f = lambda action: self.Q[state][action]
-        action = max(self.valid_actions, key=f)
+        action = max(random.sample(self.valid_actions, len(self.valid_actions)), key=f)
         return action
 
 
     def choose_action(self, state):
         """ The choose_action function is called when the agent is asked to choose
-            which action to take, based on the 'state' the smartcab is in. """
+            which action to take, based on the 'state' the smartcab is in.
+            Args:
+                state (tuple):
+
+            Returns:
+                action (str) or None: one of [None, 'forward', 'left', 'right']
+        """
 
         # Set the agent state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
         action = None
 
-        ########### 
+        ###########
         ## TO DO ##
         ###########
         # When not learning, choose a random action
-        # When learning, choose a random action with 'epsilon' probability
-        #   Otherwise, choose an action with the highest Q-value for the current state
- 
+        if self.learning == False:
+            action = self.valid_actions[random.randint(0,3)]
+        else:
+            # When learning, choose a random action with 'epsilon' probability
+            if self.epsilon > random.random():
+                action = self.valid_actions[random.randint(0,3)]
+            #   Otherwise, choose an action with the highest Q-value for the current state
+            else:
+                action = self.get_argMaxQ(state)
         return action
 
 
     def learn(self, state, action, reward):
         """ The learn function is called after the agent completes an action and
-            receives an award. This function does not consider future rewards 
+            receives an award. This function does not consider future rewards
             when conducting learning. """
-
-        ########### 
+        if self.learning == False:
+            return
+        ###########
         ## TO DO ##
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-
+        self.Q[state][action] = self.alpha*(reward + self.get_maxQ(state)) + (1 - self.alpha)*(self.Q[state][action])
         return
 
 
     def update(self):
-        """ The update function is called when a time step is completed in the 
+        """ The update function is called when a time step is completed in the
             environment for a given trial. This function will build the agent
             state, choose an action, receive a reward, and learn if enabled. """
 

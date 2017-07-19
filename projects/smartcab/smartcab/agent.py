@@ -18,6 +18,7 @@ class LearningAgent(Agent):
         self.Q = dict()          # Create a Q-table which will be a dictionary of tuples
         self.epsilon = epsilon   # Random exploration factor
         self.alpha = alpha       # Learning factor
+        self.count = 0
 
         ###########
         ## TO DO ##
@@ -37,7 +38,8 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Update epsilon using a decay function of your choice
-        self.epsilon = self.epsilon/1.03  # exponential decay function for epsilon
+        self.epsilon = 0.5*math.cos(0.01*self.count) + 0.5  # exponential decay function for epsilon
+        self.count += 1
         self.alpha = self.alpha
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
@@ -161,7 +163,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        self.Q[state][action] = self.alpha*(reward + self.get_maxQ(state)) + (1 - self.alpha)*(self.Q[state][action])
+        if self.learning == True:
+            self.Q[state][action] = self.alpha*reward + (1 - self.alpha)*(self.Q[state][action])
         return
 
 
@@ -222,7 +225,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=10, tolerance=0.05)
+    sim.run(n_test=10, tolerance=0.01)
 
 
 if __name__ == '__main__':

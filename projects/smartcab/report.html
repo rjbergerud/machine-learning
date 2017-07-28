@@ -11941,7 +11941,7 @@ div#notebook {
 </ul>
 </li>
 </ul>
-<p>The Environment class <code>act</code> is called when the agent performs an agent.  The agent decides upon an agent, and that action as well as the agent are passed as arguments to  <code>act</code>, which determines the reward associated with that action, and updates the game state with heading from the action taken.</p>
+<p>The Environment class function <code>act</code> is called when the agent performs an action.  The agent decides upon an action with its method <code>choose_action</code>, and that action as well as the agent are passed as arguments to  <code>act</code>, which determines the reward associated with that action, and updates the game state with heading from the action taken.</p>
 <p>In the Simulator, <code>render_text</code> prints the output to the console. while <code>render</code> uses pygame to display the current state.</p>
 <p>In the planner, on line 39, the x-direction (East-West) is checked first.</p>
 
@@ -14518,7 +14518,7 @@ AABJRU5ErkJggg==
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <p>The most similar statistic is that major traffic accidents seem constant for both the base agent and the learning agent.  Otherwise, the major and minor violations, and minor accidents all seem to decrease.  The seems to be a constant decrease through the trials in total number of accidents, which suggests.  Maybe a slower decay in the learner and more trials could continue that trend?</p>
-<p>The decaying function is accurately represented as a linear function with slope 1/20.</p>
+<p>The decaying function is accurately represented as a linear function with slope 1/20.  The number of trials before testing was about 20, which is consistent with the tolerance value of 0.01 intercepting the $\epsilon$-decay line at about 20.</p>
 <p>The average award increased with the number of trials, save for a poor performance in trial 13.</p>
 <p>The agent tested much better than its performance in latter trials, with an A+ score for safety.</p>
 <p>Instead, the agent has prioritized safety given the current rewards, and chooses to make a right-hand turn instead of left when the waypoint points left on green, as shown by the Q-value pair:</p>
